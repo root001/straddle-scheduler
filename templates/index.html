@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h2> Fx News Scheduler</h2>
+    {% if subscriptions|length < 1 %}
+    <div>
+        <h4> No Schedules yet.</h4>
+    </div>
+    {% else %}
+    <div>
+        <p>View all Schedules</p>
+        <table class="mdc-data-table__table view_table" aria-label="Dessert calories">
+          <thead>
+            <tr class="mdc-data-table__header-row">
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">ID</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Name</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Date & Time</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Currency Pairs</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Lot Size</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Stop Loss</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Trailing Stop</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Trigger Stop</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Pip Difference</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Comments</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Actions</th>
+                <th class="mdc-data-table__header-cell" role="columnheader" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="mdc-data-table__content">
+          {% for subscription in subscriptions %}
+            <tr class="mdc-data-table__row">
+              <th class="mdc-data-table__cell" scope="row">{{ subscription.id }}</th>
+              <td class="mdc-data-table__cell">{{ subscription.name }}</td>
+              <td class="mdc-data-table__cell">{{ subscription.date }}</td>
+                <td class="mdc-data-table__cell">{{ subscription.currency }}</td>
+                <td class="mdc-data-table__cell">{{ subscription.lot_size }}</td>
+                <td class="mdc-data-table__cell">{{ subscription.stop_loss }}</td>
+                <td class="mdc-data-table__cell">{{ subscription.trailing_stop }}</td>
+                <td class="mdc-data-table__cell">{{ subscription.trigger_stop }}</td>
+                <td class="mdc-data-table__cell">{{ subscription.pip_difference }}</td>
+                <td class="mdc-data-table__cell">{{ subscription.comments }}</td>
+                <td>
+                    <button class="secondary-content btn waves-effect waves-light blue modal-trigger" data-target="modal{{ subscription.id }}">View</button>
+                    <button class="mdc-button inner-buttton mdc-button--raised red" onclick="window.location.href='{{ url_for('update', id=subscription.id) }}'">
+                        <span class="mdc-button__label">Update</span>
+                    </button>
+                    <button class="mdc-button inner-buttton mdc-button--raised red" onclick="window.location.href='{{ url_for('delete', id=subscription.id) }}'">
+                        <span class="mdc-button__label">Delete</span>
+                    </button>
+            <!--    <a href="/delete/{{subscription.id}}">Delete</a>  -->
+                </td>
+                <td></td>
+                <!-- Add modal for view-->
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
+{% endif %}
+      <form action="/" method="POST">
+          <div class="md-12 addform">
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="text" name="name" id="name" placeholder="News Name" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="datetime-local" name="date" id="date" placeholder="Date" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="text" name="pair" id="pair" placeholder="GBPUSD,EURUSD" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="decimal" name="lotsize" id="lotsize" step=".01" placeholder="lot size" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="text" name="comment" id="comment" placeholder="Comment" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+          </div>
+
+          <div class="md-12 addform">
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="number" name="stoploss" id="stoploss" placeholder="stop loss" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="number" name="trailingstop" id="trailingstop" placeholder="trailing stop" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="number" name="triggerstop" id="triggerstop" placeholder="trigger stop" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+              <label class="mdc-text-field mdc-text-field--filled mdc-text-field--no-label">
+                  <span class="mdc-text-field__ripple"></span>
+                  <input class="mdc-text-field__input" type="number" name="pipdiff" id="pipdiff" placeholder="Pip difference" aria-label="Label">
+                  <span class="mdc-line-ripple"></span>
+              </label>
+          </div>
+
+          <button class="mdc-button mdc-button--raised">
+              <span class="mdc-button__label">Add Schedule</span>
+          </button>
+      </form>
+
+    <div class="mdc-dialog">
+  <div class="mdc-dialog__container">
+    <div class="mdc-dialog__surface"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="my-dialog-title"
+      aria-describedby="my-dialog-content">
+      <div class="mdc-dialog__content" id="my-dialog-content">
+        Discard draft?
+      </div>
+      <div class="mdc-dialog__actions">
+        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">Cancel</span>
+        </button>
+        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="discard">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">Discard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mdc-dialog__scrim"></div>
+</div>
+</div>
+
+<script>
+
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+body {
+    margin: 10px;
+    background : #bdadbc;
+}
+
+h4{
+    text-align: center;
+}
+
+.addform{
+    padding: 10px;
+    background: #fff;
+}
+
+.view_table{
+    padding-bottom: 30px;
+    background: #d1d1be;
+    width: min-content;
+    margin-bottom: 20px;
+}
+
+.inner-buttton{
+    margin: 0;
+    padding: 5px !important;
+    font-size: 0.7rem !important;
+    color: black !important;
+    background-color: brown !important;
+}
